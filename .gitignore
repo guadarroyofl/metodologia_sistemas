@@ -1,0 +1,20 @@
+# Editor y Entorno de Desarrollo
+.vscode/
+.idea/
+*.swp
+*.tmp
+
+# Archivos del sistema operativo
+.DS_Store
+Thumbs.db
+
+# Dependencias (se ignoran porque son muy pesadas)
+node_modules/
+vendor/
+venv/
+bin/
+obj/
+
+# Variables de entorno y credenciales (Seguridad)
+.env
+*.log
