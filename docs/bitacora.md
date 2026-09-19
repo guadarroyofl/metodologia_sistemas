@@ -1,6 +1,6 @@
 # Bitácora - CAOS Vintage
 
-## 14/09/2026 - Patrón (TP 2)
+## 14/09/2026 - Patrón
 
 **Problema identificado:** En CAOS, la dueña necesita sugerencias de precio de venta para prendas únicas, y hay más de una forma de calcularlas: un margen fijo sobre el costo, un multiplicador según categoría y marca, o una estimación con IA. Si todo se resuelve con `if/else` dentro de una sola función, cada criterio nuevo obliga a modificar código que ya funciona, y probar cada criterio por separado se vuelve difícil.
 
