@@ -7,6 +7,7 @@
 **Patrón elegido: Strategy.** Define una familia de algoritmos intercambiables (`MargenFijo`, `CategoriaYMarca`, `EvaluadorIA`) detrás de una misma interfaz (`calcular(prenda)`). La clase `EvaluadorPrecios` (contexto) recibe una estrategia y delega en ella, así que se puede cambiar de criterio en ejecución sin tocar el resto del sistema.
 
 **Por qué Strategy y no otro:**
+
 - **Factory Method / Abstract Factory:** resuelven cómo crear objetos, pero acá el problema es cómo variar un comportamiento.
 - **Decorator:** agrega responsabilidades apilables a un objeto. Los criterios de precio no se apilan, se reemplazan uno por otro.
 - **State:** cambia el comportamiento según el estado interno del objeto. Acá quien elige el criterio es la dueña, no el estado de la prenda.
@@ -15,7 +16,7 @@
 
 **Beneficios en el proyecto:** cumple el principio abierto/cerrado (se agrega una estrategia nueva sin modificar `EvaluadorPrecios`), permite probar cada criterio de forma aislada y deja enchufar la IA real más adelante, porque la IA queda como una estrategia más.
 
-**Implementación:** `src/backend/pricing/` (ejecutar con `python -m src.backend.pricing.demo`).
+**Implementación:** `backend/app/services/pricing/` (ejecutar desde `backend/` con `python -m app.services.pricing.demo`).
 
 ### Reflexión sobre el uso de IA
 
