@@ -18,3 +18,15 @@ obj/
 # Variables de entorno y credenciales (Seguridad)
 .env
 *.log
+
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Base de datos local (SQLite) y archivos subidos en desarrollo
+*.db
+backend/uploads/
+
+# Build del frontend
+dist/
