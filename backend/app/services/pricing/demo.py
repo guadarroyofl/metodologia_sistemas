@@ -1,4 +1,4 @@
-from src.backend.pricing import (
+from app.services.pricing import (
     CategoriaYMarca, ClienteIAMock, EvaluadorIA, EvaluadorPrecios, MargenFijo, Prenda,
 )
 
