@@ -18,6 +18,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.core.database import Base
 from app.models.categoria import Categoria
+from app.models.drop import Drop
 from app.models.estilo import Estilo
 from app.models.feria import Feria
 from app.models.imagen_prenda import ImagenPrenda
@@ -68,10 +69,15 @@ class Prenda(Base):
     )
     categoria_id: Mapped[int] = mapped_column(ForeignKey("categorias.id"), index=True)
     feria_id: Mapped[int | None] = mapped_column(ForeignKey("ferias.id"))
+        # Si la prenda es parte de un drop, no se muestra hasta la fecha de publicación
+    drop_id: Mapped[int | None] = mapped_column(
+        ForeignKey("drops.id", ondelete="SET NULL"), index=True
+    )
     creado_en: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
 
     categoria: Mapped[Categoria] = relationship()
     feria: Mapped[Feria | None] = relationship()
+    drop: Mapped[Drop | None] = relationship()
     estilos: Mapped[list[Estilo]] = relationship(secondary=prenda_estilo)
     # cascade: si se borra la prenda, se borran también sus medidas y fotos
     medidas: Mapped[list[MedidaPrenda]] = relationship(cascade="all, delete-orphan")
