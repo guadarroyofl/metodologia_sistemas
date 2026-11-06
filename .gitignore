@@ -1,20 +1,49 @@
-# Editor y Entorno de Desarrollo
+# ── Entornos virtuales / dependencias ──────────────────────────────────
+.venv/
+venv/
+node_modules/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# ── Frontend ───────────────────────────────────────────────────────────
+frontend/dist/
+frontend/.vite/
+*.tsbuildinfo
+
+# ── Base de datos local y artefactos ───────────────────────────────────
+*.db
+*.sqlite
+*.sqlite3
+*.db-shm
+*.db-wal
+*.db-journal
+backend/exports/
+backend/*.db
+database/*.db
+
+# ── Configuración sensible ─────────────────────────────────────────────
+.env
+.env.*
+!.env.example
+backend/.env
+frontend/.env
+frontend/.env.local
+!frontend/.env.example
+
+# ── Editores y sistema operativo ───────────────────────────────────────
 .vscode/
 .idea/
 *.swp
 *.tmp
-
-# Archivos del sistema operativo
 .DS_Store
 Thumbs.db
 
-# Dependencias (se ignoran porque son muy pesadas)
-node_modules/
-vendor/
-venv/
-bin/
-obj/
-
-# Variables de entorno y credenciales (Seguridad)
-.env
+# ── Logs y cobertura ───────────────────────────────────────────────────
 *.log
+logs/
+.coverage
+htmlcov/
