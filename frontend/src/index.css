@@ -1,0 +1,141 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-paper font-sans text-ink antialiased;
+  }
+
+  ::selection {
+    @apply bg-clay text-cream;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-display;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-cream;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply rounded-full bg-sand;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-clay/60;
+  }
+}
+
+@layer components {
+  .container-wide {
+    @apply mx-auto w-full max-w-[1400px] px-5 sm:px-8 lg:px-12;
+  }
+
+  .label {
+    @apply mb-2 block text-[10px] font-semibold uppercase tracking-[0.2em] text-muted;
+  }
+
+  .input {
+    @apply w-full rounded-xl border border-sand bg-white/80 px-4 py-3 text-sm text-ink shadow-sm outline-none transition placeholder:text-muted/50 focus:border-clay focus:ring-2 focus:ring-clay/10 disabled:cursor-not-allowed disabled:opacity-60;
+  }
+
+  .select {
+    @apply input appearance-none pr-10;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%237C7268' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 16px;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-ink px-6 py-3 text-sm font-semibold tracking-wide text-cream transition duration-300 hover:bg-clay focus:outline-none focus-visible:ring-2 focus-visible:ring-clay focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full border border-ink/25 bg-transparent px-6 py-3 text-sm font-semibold tracking-wide text-ink transition duration-300 hover:border-ink hover:bg-ink hover:text-cream focus:outline-none focus-visible:ring-2 focus-visible:ring-ink disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .btn-clay {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-clay px-6 py-3 text-sm font-semibold tracking-wide text-white transition duration-300 hover:bg-clay-dark focus:outline-none focus-visible:ring-2 focus-visible:ring-clay focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-4 py-2 text-sm font-medium text-muted transition hover:bg-sand/40 hover:text-ink;
+  }
+
+  .card {
+    @apply rounded-2xl border border-sand/70 bg-white/70 shadow-card backdrop-blur-sm;
+  }
+
+  .chip {
+    @apply inline-flex items-center gap-1.5 rounded-full border border-sand bg-white/60 px-3 py-1 text-[11px] font-medium text-muted;
+  }
+
+  .table-base {
+    @apply w-full border-collapse text-left text-sm;
+  }
+  .table-base thead th {
+    @apply border-b border-sand px-4 py-3 text-[10px] font-semibold uppercase tracking-[0.16em] text-muted;
+  }
+  .table-base tbody td {
+    @apply border-b border-sand/50 px-4 py-3.5 align-middle;
+  }
+  .table-base tbody tr:hover {
+    @apply bg-cream/60;
+  }
+
+  .link-underline {
+    @apply relative inline-flex items-center gap-1 font-medium text-ink after:absolute after:-bottom-0.5 after:left-0 after:h-px after:w-0 after:bg-clay after:transition-all after:duration-300 hover:after:w-full;
+  }
+
+  .eyebrow {
+    @apply text-[10px] font-semibold uppercase tracking-[0.28em] text-clay;
+  }
+
+  .display-title {
+    @apply font-display text-4xl leading-[1.05] tracking-tight text-ink sm:text-5xl lg:text-6xl;
+  }
+
+  .skeleton {
+    @apply animate-pulse rounded-xl bg-sand/60;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+.hero-wash {
+  background:
+    radial-gradient(60% 55% at 72% 18%, rgba(180, 85, 45, 0.13), transparent 65%),
+    radial-gradient(45% 45% at 18% 82%, rgba(124, 132, 113, 0.16), transparent 60%),
+    linear-gradient(180deg, #f9f3e8 0%, #fcf8f1 100%);
+}
+
+.paper-texture {
+  background-image: radial-gradient(rgba(35, 31, 32, 0.045) 0.7px, transparent 0.7px);
+  background-size: 9px 9px;
+}
+
+.admin-surface {
+  background:
+    radial-gradient(70% 50% at 100% 0%, rgba(180, 85, 45, 0.06), transparent 60%),
+    #f8f4ec;
+}
