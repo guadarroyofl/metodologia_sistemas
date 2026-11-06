@@ -1,0 +1,35 @@
+services:
+  caos-vintage:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: caos-vintage:local
+    container_name: caos-vintage
+    restart: unless-stopped
+    ports:
+      - "${CAOS_PORT:-8010}:8000"
+    environment:
+      ENVIRONMENT: production
+      DEBUG: "false"
+      SECRET_KEY: "${SECRET_KEY:-cambiar-esta-clave-en-produccion-por-una-aleatoria-de-64-caracteres}"
+      DATABASE_URL: sqlite:////app/backend/data/caos_vintage.db
+      SEED_ON_STARTUP: "true"
+      ACCESS_TOKEN_EXPIRE_MINUTES: "480"
+      RESET_TOKEN_EXPIRE_MINUTES: "30"
+      FRONTEND_ORIGINS: "${FRONTEND_ORIGINS:-http://localhost:8010,http://127.0.0.1:8010}"
+    volumes:
+      - caos_data:/app/backend/data
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/health', timeout=3)"
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+
+volumes:
+  caos_data:
+    name: caos_vintage_data
