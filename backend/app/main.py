@@ -18,6 +18,7 @@ from app.controllers.product_controller import router as product_router
 from app.controllers.report_controller import dashboard_router, router as report_router
 from app.controllers.sale_controller import admin_router as admin_sales_router
 from app.controllers.sale_controller import router as sales_router
+from app.controllers.upload_controller import router as upload_router
 from app.controllers.user_controller import router as user_router
 from app.core.config import settings
 from app.core.exceptions import AppError
@@ -150,6 +151,11 @@ app.include_router(admin_sales_router, prefix=api)
 app.include_router(ai_router, prefix=api)
 app.include_router(report_router, prefix=api)
 app.include_router(dashboard_router, prefix=api)
+app.include_router(upload_router, prefix=api)
+
+# ── Imágenes subidas desde el backoffice ──────────────────────────────
+settings.uploads_dir.mkdir(parents=True, exist_ok=True)
+app.mount("/media", StaticFiles(directory=settings.uploads_dir), name="media")
 
 
 @app.get(f"{api}/health", tags=["Sistema"], summary="Estado del servicio")

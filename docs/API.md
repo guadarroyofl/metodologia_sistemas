@@ -208,12 +208,45 @@ Alta de prenda:
   "status": "available",
   "purchase_cost": 18000,
   "price": 42000,
+  "image_url": "/media/4f1c2a9d8b7e6f5a.webp",
   "is_featured": true,
   "style_ids": [1, 5]
 }
 ```
 
 Reglas: `price > purchase_cost` (si no, `422`), categoría existente (`404`), estilos existentes (`422 invalid_styles`).
+
+---
+
+## Archivos
+
+### `POST /uploads/image` (admin) — subir foto de una prenda
+
+`multipart/form-data` con el campo `file`. Acepta JPG, PNG, WEBP o GIF de hasta 8 MB
+(configurable con `MAX_UPLOAD_MB`). La imagen se reorienta según EXIF, se redimensiona a un
+máximo de 1600 px por lado y se guarda normalizada en WEBP dentro de `backend/uploads/`.
+
+```bash
+curl -X POST http://127.0.0.1:8010/api/uploads/image \
+  -H "Authorization: Bearer $TOKEN" \
+  -F "file=@campera.jpg;type=image/jpeg"
+```
+
+```json
+{
+  "url": "/media/53197c3837a8470e88e180fe624d471e.webp",
+  "filename": "53197c3837a8470e88e180fe624d471e.webp",
+  "width": 800,
+  "height": 600,
+  "size_bytes": 950
+}
+```
+
+La `url` devuelta se guarda en `image_url` de la prenda. Los archivos se sirven públicamente
+desde `/media/{archivo}` y el directorio está excluido de Git.
+
+Errores: `422 unsupported_image_type`, `422 invalid_image`, `422 image_too_large`, `403` si el
+usuario no es administrador.
 
 ---
 

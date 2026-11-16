@@ -1,8 +1,9 @@
-import { useEffect, useMemo, useState, type FormEvent } from 'react'
+import { useEffect, useMemo, useState, type ChangeEvent, type FormEvent } from 'react'
 import {
   Archive,
   Check,
   ChevronDown,
+  ImagePlus,
   Pencil,
   Plus,
   RotateCcw,
@@ -11,9 +12,10 @@ import {
   Sparkles,
   Tags,
   Trash2,
+  Upload,
   X,
 } from 'lucide-react'
-import { api } from '../../lib/api'
+import { api, MAX_IMAGE_MB } from '../../lib/api'
 import { CONDITION_LABELS, formatCurrency, handleImageError } from '../../lib/format'
 import { useDebouncedValue } from '../../hooks/useDebouncedValue'
 import type { AdminProduct, Category, Page, ProductCondition, ProductStatus, Style } from '../../types'
@@ -90,6 +92,7 @@ export function AdminProductsPage() {
   const [editing, setEditing] = useState<AdminProduct | null>(null)
   const [form, setForm] = useState<ProductForm>(EMPTY_FORM)
   const [saving, setSaving] = useState(false)
+  const [uploadingImage, setUploadingImage] = useState(false)
 
   const [deleteTarget, setDeleteTarget] = useState<AdminProduct | null>(null)
   const [deleting, setDeleting] = useState(false)
@@ -238,6 +241,26 @@ export function AdminProductsPage() {
         ? current.style_ids.filter((id) => id !== styleId)
         : [...current.style_ids, styleId],
     }))
+  }
+
+  const uploadPhoto = async (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    event.target.value = ''
+    if (!file) return
+    if (file.size > MAX_IMAGE_MB * 1024 * 1024) {
+      toast(`La imagen supera el máximo de ${MAX_IMAGE_MB} MB.`, 'error')
+      return
+    }
+    setUploadingImage(true)
+    try {
+      const uploaded = await api.uploadImage(file)
+      setForm((current) => ({ ...current, image_url: uploaded.url }))
+      toast('Foto subida. Guardá los cambios para aplicarla a la prenda.')
+    } catch (err) {
+      toast(err instanceof Error ? err.message : 'No pudimos subir la foto.', 'error')
+    } finally {
+      setUploadingImage(false)
+    }
   }
 
   const lowMargin = useMemo(
@@ -402,7 +425,7 @@ export function AdminProductsPage() {
         footer={
           <>
             <button onClick={() => setEditorOpen(false)} className="btn-secondary px-5 py-2 text-xs">Cancelar</button>
-            <button onClick={() => document.getElementById('product-form-submit')?.click()} disabled={saving} className="btn-primary px-5 py-2 text-xs">
+            <button onClick={() => document.getElementById('product-form-submit')?.click()} disabled={saving || uploadingImage} className="btn-primary px-5 py-2 text-xs">
               {saving && <Spinner size={14} />}
               {editing ? 'Guardar cambios' : 'Crear prenda'}
             </button>
@@ -456,8 +479,60 @@ export function AdminProductsPage() {
             <Field label="Precio de venta (ARS)" hint={form.purchase_cost && form.price && Number(form.price) > Number(form.purchase_cost) ? `Margen estimado ${(((Number(form.price) - Number(form.purchase_cost)) / Number(form.price)) * 100).toFixed(1)}%` : 'Debe ser mayor al costo.'}>
               <input type="number" min={1} step="0.01" value={form.price} onChange={(event) => setForm({ ...form, price: event.target.value })} required className="input" />
             </Field>
-            <Field label="URL de imagen" className="sm:col-span-2">
-              <input value={form.image_url} onChange={(event) => setForm({ ...form, image_url: event.target.value })} className="input" placeholder="https://…" />
+            <Field
+              label="Foto de la prenda"
+              className="sm:col-span-2"
+              hint={`Subí un archivo JPG, PNG, WEBP o GIF de hasta ${MAX_IMAGE_MB} MB, o pegá una URL.`}
+            >
+              <div className="flex flex-col gap-3 sm:flex-row">
+                <div className="flex h-28 w-24 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-sand bg-sand">
+                  {form.image_url ? (
+                    <img
+                      key={form.image_url}
+                      src={form.image_url}
+                      alt="Vista previa de la prenda"
+                      onError={handleImageError}
+                      className="h-full w-full object-cover"
+                    />
+                  ) : (
+                    <ImagePlus size={22} className="text-muted" />
+                  )}
+                </div>
+                <div className="min-w-0 flex-1 space-y-2">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <label
+                      className={cn(
+                        'btn-secondary cursor-pointer px-4 py-2 text-xs',
+                        uploadingImage && 'pointer-events-none opacity-60',
+                      )}
+                    >
+                      {uploadingImage ? <Spinner size={13} /> : <Upload size={13} />}
+                      {uploadingImage ? 'Subiendo…' : form.image_url ? 'Cambiar foto' : 'Subir foto'}
+                      <input
+                        type="file"
+                        accept="image/jpeg,image/png,image/webp,image/gif"
+                        onChange={uploadPhoto}
+                        className="hidden"
+                      />
+                    </label>
+                    {form.image_url && (
+                      <button
+                        type="button"
+                        onClick={() => setForm({ ...form, image_url: '' })}
+                        className="btn-secondary px-3 py-2 text-xs"
+                      >
+                        <Trash2 size={13} /> Quitar
+                      </button>
+                    )}
+                  </div>
+                  <input
+                    value={form.image_url}
+                    onChange={(event) => setForm({ ...form, image_url: event.target.value })}
+                    className="input py-2 text-xs"
+                    placeholder="https://… o /media/archivo.webp"
+                  />
+                </div>
+              </div>
             </Field>
           </div>
 

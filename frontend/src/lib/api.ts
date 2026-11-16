@@ -103,6 +103,33 @@ export async function download(path: string): Promise<DownloadResult> {
   }
 }
 
+export interface ImageUpload {
+  url: string
+  filename: string
+  width: number
+  height: number
+  size_bytes: number
+}
+
+export const MAX_IMAGE_MB = 8
+
+export async function uploadImage(file: File): Promise<ImageUpload> {
+  const form = new FormData()
+  form.append('file', file)
+  const headers: Record<string, string> = { Accept: 'application/json' }
+  const token = getToken()
+  if (token) headers.Authorization = `Bearer ${token}`
+
+  let response: Response
+  try {
+    response = await fetch(`${API_BASE}/uploads/image`, { method: 'POST', headers, body: form })
+  } catch {
+    throw new ApiError('No pudimos subir la imagen. Revisá tu conexión.', 0)
+  }
+  if (!response.ok) throw await parseError(response)
+  return (await response.json()) as ImageUpload
+}
+
 export function saveBlob(blob: Blob, filename: string): void {
   const url = URL.createObjectURL(blob)
   const link = document.createElement('a')
@@ -119,4 +146,5 @@ export const api = {
   post: <T>(path: string, body?: unknown) => request<T>(path, { method: 'POST', body }),
   patch: <T>(path: string, body?: unknown) => request<T>(path, { method: 'PATCH', body }),
   delete: <T>(path: string) => request<T>(path, { method: 'DELETE' }),
+  uploadImage,
 }

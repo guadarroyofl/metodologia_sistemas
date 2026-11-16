@@ -20,6 +20,7 @@ os.environ["DEBUG"] = "false"
 os.environ["SECRET_KEY"] = "test-secret-key-caos-vintage-0123456789abcdef"
 os.environ["SEED_ON_STARTUP"] = "true"
 os.environ["FRONTEND_ORIGINS"] = "http://localhost:5173"
+os.environ["UPLOADS_DIR"] = str(_TEST_DIR / "uploads")
 
 from fastapi.testclient import TestClient  # noqa: E402
 

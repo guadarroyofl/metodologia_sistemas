@@ -51,6 +51,8 @@ class Settings:
     currency: str = "ARS"
     brand_name: str = "CAOS Vintage"
     frontend_dist: Path = BASE_DIR.parent / "frontend" / "dist"
+    uploads_dir: Path = Path(os.getenv("UPLOADS_DIR", (BASE_DIR / "uploads").as_posix()))
+    max_upload_mb: int = int(os.getenv("MAX_UPLOAD_MB", "8"))
 
     @property
     def is_sqlite(self) -> bool:
