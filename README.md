@@ -378,6 +378,7 @@ Sistema experto con **patrón Strategy**:
 | [`docs/API.md`](docs/API.md) | Endpoints, payloads, códigos de estado y ejemplos |
 | [`docs/PRESUPUESTO_Y_ESCALABILIDAD.md`](docs/PRESUPUESTO_Y_ESCALABILIDAD.md) | Estimación de costos, horas, infraestructura y hoja de ruta |
 | [`docs/resumen-exposicion.pdf`](docs/resumen-exposicion.pdf) | Resumen de una página y láminas de arquitectura y DER para la exposición |
+| [`docs/Resumen-Exposicion.docx`](docs/Resumen-Exposicion.docx) | La misma exposición en Word, editable, con las láminas como imágenes |
 | [`database/README.md`](database/README.md) | DDL, seed, reglas de integridad y regeneración |
 
 ---
