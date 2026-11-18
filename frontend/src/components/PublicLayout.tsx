@@ -193,7 +193,7 @@ export function PublicLayout() {
               </p>
               <div className="mt-5 flex gap-2">
                 <a
-                  href="https://instagram.com"
+                  href="https://www.instagram.com/caos_________________?utm_source=ig_web_button_share_sheet&gwpx=ZDNlZDc0MzIxNw=="
                   target="_blank"
                   rel="noreferrer"
                   className="flex h-9 w-9 items-center justify-center rounded-full border border-sand text-muted transition hover:border-clay hover:text-clay"
@@ -257,9 +257,8 @@ export function PublicLayout() {
             </div>
           </div>
 
-          <div className="mt-12 flex flex-col gap-2 border-t border-sand pt-6 text-[10px] uppercase tracking-[0.14em] text-muted sm:flex-row sm:items-center sm:justify-between">
-            <p>© 2026 CAOS Vintage · Buenos Aires, Argentina</p>
-            <p>Metodología de Sistemas · Proyecto académico</p>
+          <div className="mt-12 border-t border-sand pt-6 text-[10px] uppercase tracking-[0.14em] text-muted">
+            <p>© 2026 CAOS Vintage · Tucumán, Argentina</p>
           </div>
         </div>
       </footer>
