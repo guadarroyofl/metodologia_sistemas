@@ -39,6 +39,14 @@ CATEGORY_KEYWORDS: dict[str, list[str]] = {
     "accesorios": ["accesorio", "cartera", "bolso", "cinturon", "bufanda"],
 }
 
+SEASON_SUMMER_KEYWORDS: list[str] = [
+    "verano", "calor", "caluroso", "calurosa", "veraniego", "veraniega",
+    "summer", "playa", "sol", "calorcito", "de verano",
+]
+SEASON_WINTER_KEYWORDS: list[str] = [
+    "invierno", "frio", "fria", "invernal", "winter", "abrigo de invierno",
+]
+
 STYLE_TIPS: dict[str, str] = {
     "vintage": "Mezclá una prenda statement vintage con básicos neutros para que el look respire.",
     "y2k": "Sumá accesorios metálicos y siluetas ajustadas; el contraste de texturas es clave.",
@@ -106,6 +114,12 @@ class StylistEngine:
         normalized_message = _normalize(message)
         message_tokens = _tokens(message)
 
+        season = None
+        if any(_normalize(k) in normalized_message for k in SEASON_SUMMER_KEYWORDS):
+            season = "summer"
+        elif any(_normalize(k) in normalized_message for k in SEASON_WINTER_KEYWORDS):
+            season = "winter"
+
         detected: list[str] = []
         catalog_styles = {
             style.name.lower(): style.name for product in products for style in product.styles
@@ -137,6 +151,21 @@ class StylistEngine:
             product_styles = {_normalize(style.name) for style in product.styles}
             score = 0.0
             reasons: list[str] = []
+
+            cat_norm = _normalize(product.category.name)
+            if season == "summer":
+                if cat_norm == "abrigos":
+                    score -= 40
+                elif cat_norm == "sweaters":
+                    score -= 35
+                elif cat_norm == "camperas":
+                    score -= 20
+                if cat_norm in {"remeras", "vestidos", "faldas"}:
+                    score += 6
+            elif season == "winter":
+                if cat_norm in {"abrigos", "sweaters", "camperas"}:
+                    score += 8
+                    reasons.append("Ideal para el frío")
 
             if budget_max and float(product.price) > budget_max * 1.15:
                 continue
@@ -219,7 +248,7 @@ class StylistEngine:
 
         outfits = self._build_outfits(selected, detected_labels)
         tips = self._build_tips(detected)
-        reply = self._build_reply(selected, detected_labels, budget_max, category_id)
+        reply = self._build_reply(selected, detected_labels, budget_max, category_id, season)
 
         return StylistResult(
             reply=reply,
@@ -283,8 +312,14 @@ class StylistEngine:
         styles: list[str],
         budget_max: float | None,
         category_id: int | None,
+        season: str | None = None,
     ) -> str:
         if not suggestions:
+            if season == "summer":
+                return (
+                    "Hoy no encontré piezas livianas que encajen con lo que buscás para verano. "
+                    "Probá con otro estilo o ampliá el presupuesto: el stock es unitario y se renueva."
+                )
             return (
                 "Hoy no encontré piezas que encajen exactamente con lo que buscás. "
                 "Probá con otro estilo o ampliá el presupuesto: el stock es unitario y se renueva."
@@ -292,9 +327,10 @@ class StylistEngine:
         style_text = f" Estilo detectado: {', '.join(styles)}." if styles else ""
         budget_text = f" Filtrado por un presupuesto de ${budget_max:,.0f}.".replace(",", ".") if budget_max else ""
         category_text = " Priorizando la categoría que mencionaste." if category_id else ""
+        season_text = " Pensando en clima cálido, prioricé prendas livianas (y evité abrigos pesados)." if season == "summer" else ""
         names = ", ".join(item.product.name for item in suggestions[:2])
         return (
-            f"¡Hola! Soy el Personal Shopper de CAOS.{style_text}{budget_text}{category_text} "
+            f"¡Hola! Soy el Personal Shopper de CAOS.{style_text}{budget_text}{category_text}{season_text} "
             f"Encontré {len(suggestions)} piezas que pueden funcionar; empecemos por {names}. "
             "Cada prenda es única, así que si te gusta una, conviene reservarla pronto."
         )
