@@ -377,7 +377,6 @@ Sistema experto con **patrón Strategy**:
 | [`docs/ARQUITECTURA.md`](docs/ARQUITECTURA.md) | Capas MVC, POO, patrones, flujos, decisiones y estructura del frontend |
 | [`docs/API.md`](docs/API.md) | Endpoints, payloads, códigos de estado y ejemplos |
 | [`docs/PRESUPUESTO_Y_ESCALABILIDAD.md`](docs/PRESUPUESTO_Y_ESCALABILIDAD.md) | Estimación de costos, horas, infraestructura y hoja de ruta |
-| [`docs/resumen-exposicion.pdf`](docs/resumen-exposicion.pdf) | Resumen de una página y láminas de arquitectura y DER para la exposición |
 | [`database/README.md`](database/README.md) | DDL, seed, reglas de integridad y regeneración |
 
 ---
